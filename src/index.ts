@@ -11,8 +11,9 @@ const s3 = new S3({
 const app = express();
 
 app.get("/*", async (req, res) => {
+  const host = req.hostname;
 
-  const id = "v5s6p";
+  const id = host.split(".")[0];
   const filePath = req.path;
   const contents = await s3
     .getObject({
@@ -27,7 +28,7 @@ app.get("/*", async (req, res) => {
     ? "text/css"
     : "application/javascript";
   res.set("Content-Type", type);
-    console.log(type);
+  console.log(type);
   res.send(contents.Body);
 });
 
