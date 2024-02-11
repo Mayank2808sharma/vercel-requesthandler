@@ -12,18 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv").config();
 const express_1 = __importDefault(require("express"));
 const aws_sdk_1 = require("aws-sdk");
 const s3 = new aws_sdk_1.S3({
-    accessKeyId: "e8a391d9a2320f4bc184dc416aa4a549",
-    secretAccessKey: "9fa7de05e45d1ea081fa6e110f3e93f842798115e4f0597f3c71cb6766e923d4",
-    endpoint: "https://0665b29569da4375a118e9c100df0bbd.r2.cloudflarestorage.com",
+    endpoint: process.env.ENDPOINT,
+    accessKeyId: process.env.ACCESSKEYID,
+    secretAccessKey: process.env.SECRETACCESSKEY,
 });
 const app = (0, express_1.default)();
 app.get("/*", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // id.100xdevs.com
-    const host = req.hostname;
-    const id = host.split(".")[0];
+    const id = "v5s6p";
     const filePath = req.path;
     const contents = yield s3
         .getObject({
@@ -37,6 +36,7 @@ app.get("/*", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             ? "text/css"
             : "application/javascript";
     res.set("Content-Type", type);
+    console.log(type);
     res.send(contents.Body);
 }));
 app.listen(3001);
